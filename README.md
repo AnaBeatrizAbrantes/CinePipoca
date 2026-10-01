@@ -24,3 +24,5 @@ Uma aplicação web 100% estática, moderna e interativa desenvolvida para geren
 * **HTML5** 
 * **CSS3** 
 * **JavaScript Puro / Canvas API**
+
+Acesso: https://anabeatrizabrantes.github.io/CinePipoca/ 
