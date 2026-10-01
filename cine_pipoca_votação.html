@@ -1,0 +1,998 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cine Pipoca 🍿 - Edição Especial Escolar</title>
+    <!-- Tailwind CSS para estilização moderna e responsiva -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        display: ['Fredoka', 'sans-serif'],
+                        body: ['Plus Jakarta Sans', 'sans-serif'],
+                    },
+                    colors: {
+                        pipoca: {
+                            gold: '#FFD700',
+                            red: '#E50914',
+                            dark: '#0B0D10',
+                            card: '#161B22',
+                            border: '#2A313D',
+                            dragao: '#3B82F6',
+                            imperador: '#8B5CF6',
+                            tesouro: '#10B981'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #08090C;
+            color: #F3F4F6;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, h4, .font-display {
+            font-family: 'Fredoka', cursive;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #08090C;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #212631;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #FFD700;
+        }
+
+        /* Cards and Glows */
+        .glow-card {
+            box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.8);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .glow-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 35px -10px rgba(255, 215, 0, 0.18);
+        }
+
+        /* Pulsing countdown text */
+        .countdown-pulse {
+            animation: pulseScale 0.75s infinite alternate ease-in-out;
+        }
+        @keyframes pulseScale {
+            0% { transform: scale(0.95); opacity: 0.8; }
+            100% { transform: scale(1.2); opacity: 1; text-shadow: 0 0 40px rgba(255, 215, 0, 0.9); }
+        }
+
+        /* Floating pattern */
+        .popcorn-bg {
+            background-image: radial-gradient(rgba(255, 215, 0, 0.07) 1.5px, transparent 1.5px);
+            background-size: 28px 28px;
+        }
+
+        /* Print styles */
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+            #printable-card-area, #printable-card-area * {
+                visibility: visible;
+            }
+            #printable-card-area {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+                background: white !important;
+                color: black !important;
+                border: 2px solid #000;
+                padding: 20px;
+                box-shadow: none !important;
+            }
+            .no-print {
+                display: none !important;
+            }
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col popcorn-bg antialiased selection:bg-yellow-400 selection:text-black">
+
+    <header class="sticky top-0 z-40 bg-gray-950/90 backdrop-blur-md border-b border-gray-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <div class="flex items-center space-x-3 cursor-pointer" onclick="switchTab('votação')">
+                <span class="text-4xl animate-bounce">🍿</span>
+                <div>
+                    <h1 class="text-2xl font-bold bg-gradient-to-r from-yellow-400 via-amber-300 to-red-500 bg-clip-text text-transparent">
+                        CINE PIPOCA
+                    </h1>
+                    <p class="text-xs text-gray-400 tracking-wider uppercase font-semibold">Evento Escolar de Cinema</p>
+                </div>
+            </div>
+
+            <!-- Navegação principal sem README/GitHub -->
+            <nav class="hidden md:flex space-x-2 bg-gray-900/80 p-1.5 rounded-2xl border border-gray-800">
+                <button onclick="switchTab('votação')" id="tab-btn-votação" class="tab-btn px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-200 bg-yellow-400 text-gray-950 shadow-md">
+                    🍿 Registrar Votação
+                </button>
+                <button onclick="switchTab('central')" id="tab-btn-central" class="tab-btn px-4 py-2 rounded-xl text-sm font-semibold text-gray-300 hover:text-white hover:bg-gray-800 transition-all duration-200">
+                    🎬 Central de Animações
+                </button>
+                <button onclick="switchTab('teste')" id="tab-btn-teste" class="tab-btn px-4 py-2 rounded-xl text-sm font-semibold text-gray-300 hover:text-white hover:bg-gray-800 transition-all duration-200">
+                    🧪 Testar Animações
+                </button>
+                <button onclick="switchTab('revelacao')" id="tab-btn-revelacao" class="tab-btn px-4 py-2 rounded-xl text-sm font-semibold text-gray-300 hover:text-white hover:bg-gray-800 transition-all duration-200">
+                    🏆 Revelação Final
+                </button>
+            </nav>
+
+            <button onclick="toggleMobileMenu()" class="md:hidden p-2 rounded-lg bg-gray-800 text-gray-300 hover:text-white">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+            </button>
+        </div>
+
+        <div id="mobile-menu" class="hidden md:hidden bg-gray-900 border-b border-gray-800 px-4 py-4 space-y-2">
+            <button onclick="switchTab('votação'); toggleMobileMenu()" class="w-full text-left px-4 py-3 rounded-xl font-medium bg-gray-800 text-yellow-400">🍿 Registrar Votação</button>
+            <button onclick="switchTab('central'); toggleMobileMenu()" class="w-full text-left px-4 py-3 rounded-xl font-medium text-gray-300 hover:bg-gray-800">🎬 Central de Animações</button>
+            <button onclick="switchTab('teste'); toggleMobileMenu()" class="w-full text-left px-4 py-3 rounded-xl font-medium text-gray-300 hover:bg-gray-800">🧪 Testar Animações</button>
+            <button onclick="switchTab('revelacao'); toggleMobileMenu()" class="w-full text-left px-4 py-3 rounded-xl font-medium text-gray-300 hover:bg-gray-800">🏆 Revelação Final</button>
+        </div>
+    </header>
+
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+        <!-- ABA 1: REGISTRAR VOTAÇÃO -->
+        <section id="view-votação" class="tab-view space-y-8">
+            <div class="bg-gray-900/60 backdrop-blur-md rounded-3xl p-6 md:p-8 border border-gray-800 shadow-2xl">
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
+                    <div>
+                        <h2 class="text-3xl font-bold text-yellow-400 flex items-center gap-3">
+                            <span>🍿</span> REGISTRAR VOTAÇÃO
+                        </h2>
+                        <p class="text-gray-400 text-sm mt-1">Informe a turma e a contagem manual para calcular o resultado da turma.</p>
+                    </div>
+                </div>
+
+                <form id="vote-form" onsubmit="event.preventDefault(); calcularResultado();" class="space-y-6">
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-300 mb-2">Turma / Agrupamento:</label>
+                        <input type="text" id="turma-input" placeholder="Ex: 3º Ano A" required
+                            class="w-full max-w-md px-4 py-3 rounded-xl bg-gray-950 border border-gray-700 text-white focus:outline-none focus:border-yellow-400 focus:ring-2 focus:ring-yellow-400/20 font-medium">
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-2">
+                        <!-- Dragão -->
+                        <div class="bg-gray-950/80 p-5 rounded-2xl border border-blue-500/30 hover:border-blue-500 transition-all">
+                            <div class="flex items-center space-x-3 mb-4">
+                                <span class="text-3xl">🐉</span>
+                                <div>
+                                    <h3 class="font-bold text-blue-400">Como Treinar o Seu Dragão</h3>
+                                    <p class="text-xs text-gray-500">Filme 01</p>
+                                </div>
+                            </div>
+                            <label class="block text-xs uppercase text-gray-400 mb-1">Quantidade de votos:</label>
+                            <input type="number" id="votos-dragao" min="0" value="0" required
+                                class="w-full px-4 py-3 rounded-xl bg-gray-900 border border-gray-800 text-2xl font-bold text-yellow-400 text-center focus:outline-none focus:border-blue-400">
+                        </div>
+
+                        <!-- Imperador -->
+                        <div class="bg-gray-950/80 p-5 rounded-2xl border border-purple-500/30 hover:border-purple-500 transition-all">
+                            <div class="flex items-center space-x-3 mb-4">
+                                <span class="text-3xl">🦙</span>
+                                <div>
+                                    <h3 class="font-bold text-purple-400">A Nova Onda do Imperador</h3>
+                                    <p class="text-xs text-gray-500">Filme 02</p>
+                                </div>
+                            </div>
+                            <label class="block text-xs uppercase text-gray-400 mb-1">Quantidade de votos:</label>
+                            <input type="number" id="votos-imperador" min="0" value="0" required
+                                class="w-full px-4 py-3 rounded-xl bg-gray-900 border border-gray-800 text-2xl font-bold text-yellow-400 text-center focus:outline-none focus:border-purple-400">
+                        </div>
+
+                        <!-- Tesouro -->
+                        <div class="bg-gray-950/80 p-5 rounded-2xl border border-emerald-500/30 hover:border-emerald-500 transition-all">
+                            <div class="flex items-center space-x-3 mb-4">
+                                <span class="text-3xl">🚀</span>
+                                <div>
+                                    <h3 class="font-bold text-emerald-400">Planeta do Tesouro</h3>
+                                    <p class="text-xs text-gray-500">Filme 03</p>
+                                </div>
+                            </div>
+                            <label class="block text-xs uppercase text-gray-400 mb-1">Quantidade de votos:</label>
+                            <input type="number" id="votos-tesouro" min="0" value="0" required
+                                class="w-full px-4 py-3 rounded-xl bg-gray-900 border border-gray-800 text-2xl font-bold text-yellow-400 text-center focus:outline-none focus:border-emerald-400">
+                        </div>
+                    </div>
+
+                    <div class="pt-4 flex justify-end">
+                        <button type="submit" class="w-full sm:w-auto px-8 py-4 bg-gradient-to-r from-yellow-500 to-amber-600 text-gray-950 font-bold rounded-2xl text-lg hover:from-yellow-400 hover:to-amber-500 shadow-xl transition-all transform active:scale-95 flex items-center justify-center gap-2">
+                            <span>🎬</span> CALCULAR RESULTADO
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- CARTÃO DE RESULTADO PARA PRINT -->
+            <div id="resultado-card" class="hidden">
+                <div id="printable-card-area" class="bg-gradient-to-br from-gray-900 via-gray-900 to-black p-8 rounded-3xl border-2 border-yellow-500/50 shadow-2xl relative overflow-hidden">
+                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center border-b border-gray-800 pb-6 mb-6">
+                        <div>
+                            <span class="text-xs uppercase tracking-widest text-yellow-400 font-bold">Relatório de Votação da Turma</span>
+                            <h3 id="card-turma-title" class="text-3xl font-extrabold text-white">3º ANO A</h3>
+                        </div>
+                        <span class="mt-2 sm:mt-0 px-3 py-1 bg-yellow-400/10 text-yellow-400 text-xs rounded-full font-semibold border border-yellow-400/20">
+                            Cine Pipoca Oficial
+                        </span>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+                        <div class="bg-gray-950/60 p-4 rounded-xl border border-gray-800 flex justify-between items-center">
+                            <span class="text-sm font-medium text-gray-300">🐉 Como Treinar o Seu Dragão</span>
+                            <span id="card-votos-dragao" class="font-extrabold text-xl text-blue-400">0</span>
+                        </div>
+                        <div class="bg-gray-950/60 p-4 rounded-xl border border-gray-800 flex justify-between items-center">
+                            <span class="text-sm font-medium text-gray-300">🦙 A Nova Onda do Imperador</span>
+                            <span id="card-votos-imperador" class="font-extrabold text-xl text-purple-400">0</span>
+                        </div>
+                        <div class="bg-gray-950/60 p-4 rounded-xl border border-gray-800 flex justify-between items-center">
+                            <span class="text-sm font-medium text-gray-300">🚀 Planeta do Tesouro</span>
+                            <span id="card-votos-tesouro" class="font-extrabold text-xl text-emerald-400">0</span>
+                        </div>
+                    </div>
+
+                    <div id="vencedor-box" class="p-6 rounded-2xl bg-yellow-500/10 border-2 border-yellow-500/40 text-center">
+                        <span class="text-xs font-bold uppercase tracking-widest text-yellow-400">🏆 MAIS VOTADO DA TURMA</span>
+                        <h2 id="card-vencedor-nome" class="text-3xl md:text-4xl font-extrabold text-yellow-400 mt-1">
+                            🚀 PLANETA DO TESOURO
+                        </h2>
+                    </div>
+
+                    <div class="mt-8 flex flex-wrap justify-between items-center gap-4 no-print border-t border-gray-800/80 pt-6">
+                        <button onclick="window.print()" class="px-5 py-2.5 rounded-xl bg-gray-800 hover:bg-gray-700 text-gray-200 text-sm font-semibold transition flex items-center gap-2">
+                            <span>🖨️</span> Imprimir / Tirar Print
+                        </button>
+                        <button onclick="limparFormulario()" class="px-6 py-2.5 rounded-xl bg-yellow-400 hover:bg-yellow-300 text-gray-950 font-bold text-sm transition flex items-center gap-2 shadow-lg">
+                            <span>➕</span> REGISTRAR OUTRA TURMA
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ABA 2: CENTRAL DE ANIMAÇÕES -->
+        <section id="view-central" class="tab-view hidden space-y-6">
+            <div class="bg-gray-900/60 backdrop-blur-md rounded-3xl p-6 md:p-8 border border-gray-800">
+                <div class="mb-6">
+                    <h2 class="text-3xl font-bold text-yellow-400 flex items-center gap-3">
+                        <span>🎬</span> CENTRAL DE ANIMAÇÕES
+                    </h2>
+                    <p class="text-gray-400 text-sm mt-1">Escolha e execute qualquer animação independentemente da votação.</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <!-- Dragão -->
+                    <div class="glow-card bg-gray-950 p-6 rounded-2xl border border-blue-500/30 flex flex-col justify-between">
+                        <div>
+                            <div class="text-5xl mb-4">🐉</div>
+                            <h3 class="text-xl font-bold text-blue-400">Como Treinar o Seu Dragão</h3>
+                            <p class="text-gray-400 text-xs mt-2 leading-relaxed">
+                                Voo acrobático do Banguela sobre Berk com Aurora Boreal, montanhas em parallax, explosões de plasma e fogos.
+                            </p>
+                        </div>
+                        <button onclick="executarAnimacao('dragao')" class="mt-6 w-full py-3 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-xl text-sm transition shadow-lg flex items-center justify-center gap-2">
+                            <span>▶</span> RODAR ANIMAÇÃO — DRAGÃO
+                        </button>
+                    </div>
+
+                    <!-- Imperador -->
+                    <div class="glow-card bg-gray-950 p-6 rounded-2xl border border-purple-500/30 flex flex-col justify-between">
+                        <div>
+                            <div class="text-5xl mb-4">🦙</div>
+                            <h3 class="text-xl font-bold text-purple-400">A Nova Onda do Imperador</h3>
+                            <p class="text-gray-400 text-xs mt-2 leading-relaxed">
+                                Galope festivo da Lhama Kuzco com templo Inca, coroa imperial, chuva de ouro e confetti com cômica celebração.
+                            </p>
+                        </div>
+                        <button onclick="executarAnimacao('imperador')" class="mt-6 w-full py-3 bg-purple-600 hover:bg-purple-500 text-white font-bold rounded-xl text-sm transition shadow-lg flex items-center justify-center gap-2">
+                            <span>▶</span> RODAR ANIMAÇÃO — IMPERADOR
+                        </button>
+                    </div>
+
+                    <!-- Tesouro -->
+                    <div class="glow-card bg-gray-950 p-6 rounded-2xl border border-emerald-500/30 flex flex-col justify-between">
+                        <div>
+                            <div class="text-5xl mb-4">🚀</div>
+                            <h3 class="text-xl font-bold text-emerald-400">Planeta do Tesouro</h3>
+                            <p class="text-gray-400 text-xs mt-2 leading-relaxed">
+                                Mapa estelar holográfico abrindo no espaço, prancha solar flutuando com o pequeno Morph no cosmos.
+                            </p>
+                        </div>
+                        <button onclick="executarAnimacao('tesouro')" class="mt-6 w-full py-3 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-xl text-sm transition shadow-lg flex items-center justify-center gap-2">
+                            <span>▶</span> RODAR ANIMAÇÃO — TESOURO
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ABA 3: MODO DE TESTE -->
+        <section id="view-teste" class="tab-view hidden space-y-6">
+            <div class="bg-gray-900/60 backdrop-blur-md rounded-3xl p-6 md:p-8 border border-gray-800">
+                <div class="mb-6">
+                    <h2 class="text-3xl font-bold text-yellow-400 flex items-center gap-3">
+                        <span>🧪</span> TESTAR ANIMAÇÕES
+                    </h2>
+                    <p class="text-gray-400 text-sm mt-1">Teste e confira as animações antes de iniciar o evento. Não altera os votos registrados.</p>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <button onclick="executarAnimacao('dragao')" class="p-6 bg-gray-950 hover:bg-blue-950/40 border border-blue-500/40 rounded-2xl text-left transition flex items-center space-x-4">
+                        <span class="text-4xl">🐉</span>
+                        <div>
+                            <h4 class="font-bold text-blue-400">Testar Dragão</h4>
+                            <p class="text-xs text-gray-500">Acrobacias & Aurora</p>
+                        </div>
+                    </button>
+
+                    <button onclick="executarAnimacao('imperador')" class="p-6 bg-gray-950 hover:bg-purple-950/40 border border-purple-500/40 rounded-2xl text-left transition flex items-center space-x-4">
+                        <span class="text-4xl">🦙</span>
+                        <div>
+                            <h4 class="font-bold text-purple-400">Testar Nova Onda</h4>
+                            <p class="text-xs text-gray-500">Lhama & Ouro Inca</p>
+                        </div>
+                    </button>
+
+                    <button onclick="executarAnimacao('tesouro')" class="p-6 bg-gray-950 hover:bg-emerald-950/40 border border-emerald-500/40 rounded-2xl text-left transition flex items-center space-x-4">
+                        <span class="text-4xl">🚀</span>
+                        <div>
+                            <h4 class="font-bold text-emerald-400">Testar Tesouro</h4>
+                            <p class="text-xs text-gray-500">Mapa Holográfico & Surfer</p>
+                        </div>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ABA 4: REVELAÇÃO FINAL -->
+        <section id="view-revelacao" class="tab-view hidden space-y-6">
+            <div class="bg-gray-900/60 backdrop-blur-md rounded-3xl p-6 md:p-8 border border-gray-800 text-center max-w-3xl mx-auto">
+                <span class="text-5xl">🏆</span>
+                <h2 class="text-3xl font-extrabold text-yellow-400 mt-2">REVELAÇÃO FINAL DO VENCEDOR</h2>
+                <p class="text-gray-300 text-sm mt-2 max-w-xl mx-auto">
+                    Selecione manualmente o filme vencedor para acionar a contagem regressiva especial diante da plateia!
+                </p>
+
+                <div class="mt-8 grid grid-cols-1 gap-4">
+                    <button onclick="iniciarRevelacao('dragao')" class="p-5 rounded-2xl bg-gradient-to-r from-blue-900/60 to-blue-950 border-2 border-blue-500 hover:border-yellow-400 text-white font-bold text-lg transition flex items-center justify-between px-6 shadow-lg">
+                        <span class="flex items-center gap-3">🐉 Como Treinar o Seu Dragão</span>
+                        <span class="text-xs bg-blue-500/20 px-3 py-1 rounded-full text-blue-300">Escolher Vencedor</span>
+                    </button>
+
+                    <button onclick="iniciarRevelacao('imperador')" class="p-5 rounded-2xl bg-gradient-to-r from-purple-900/60 to-purple-950 border-2 border-purple-500 hover:border-yellow-400 text-white font-bold text-lg transition flex items-center justify-between px-6 shadow-lg">
+                        <span class="flex items-center gap-3">🦙 A Nova Onda do Imperador</span>
+                        <span class="text-xs bg-purple-500/20 px-3 py-1 rounded-full text-purple-300">Escolher Vencedor</span>
+                    </button>
+
+                    <button onclick="iniciarRevelacao('tesouro')" class="p-5 rounded-2xl bg-gradient-to-r from-emerald-900/60 to-emerald-950 border-2 border-emerald-500 hover:border-yellow-400 text-white font-bold text-lg transition flex items-center justify-between px-6 shadow-lg">
+                        <span class="flex items-center gap-3">🚀 Planeta do Tesouro</span>
+                        <span class="text-xs bg-emerald-500/20 px-3 py-1 rounded-full text-emerald-300">Escolher Vencedor</span>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- MODAL DA TELA DE ANIMAÇÃO -->
+    <div id="animation-modal" class="fixed inset-0 z-50 bg-black hidden flex-col justify-between overflow-hidden">
+        <!-- Controles Superiores -->
+        <div class="absolute top-4 left-4 right-4 z-20 flex justify-between items-center pointer-events-auto">
+            <div class="flex items-center gap-2">
+                <button onclick="repetirAnimacao()" class="px-4 py-2 bg-gray-900/90 hover:bg-gray-800 text-yellow-400 border border-yellow-500/30 rounded-xl text-xs font-bold transition flex items-center gap-2 backdrop-blur-md shadow-lg">
+                    <span>🔄</span> REPETIR ANIMAÇÃO
+                </button>
+                <button onclick="toggleFullscreen()" class="px-4 py-2 bg-gray-900/90 hover:bg-gray-800 text-yellow-400 border border-yellow-500/30 rounded-xl text-xs font-bold transition flex items-center gap-2 backdrop-blur-md shadow-lg">
+                    <span>⛶</span> TELA CHEIA
+                </button>
+            </div>
+            <button onclick="fecharAnimacao()" class="px-4 py-2 bg-red-600/90 hover:bg-red-600 text-white rounded-xl text-xs font-bold transition shadow-lg flex items-center gap-2">
+                <span>✕</span> SAIR DA ANIMAÇÃO
+            </button>
+        </div>
+
+        <canvas id="anim-canvas" class="w-full h-full block bg-black"></canvas>
+
+        <!-- Banner de Vencedor -->
+        <div id="anim-splash" class="absolute inset-0 z-10 flex flex-col items-center justify-center pointer-events-none opacity-0 transition-opacity duration-1000 bg-black/40 backdrop-blur-xs">
+            <div class="text-center p-8 rounded-3xl bg-gray-950/90 border-2 border-yellow-400/80 shadow-2xl max-w-xl mx-4 transform transition-all duration-700 scale-90" id="anim-splash-card">
+                <span id="splash-icon" class="text-7xl block mb-2">🐉</span>
+                <h2 id="splash-title" class="text-3xl md:text-5xl font-extrabold text-yellow-400 mb-2">
+                    COMO TREINAR O SEU DRAGÃO
+                </h2>
+                <div class="mt-4 px-6 py-2 bg-gradient-to-r from-yellow-500 to-amber-600 text-gray-950 font-black text-xl rounded-full tracking-wider shadow-xl inline-block">
+                    🎉 FOI O FILME ESCOLHIDO!
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- OVERLAY DE CONTAGEM REGRESSIVA -->
+    <div id="countdown-modal" class="fixed inset-0 z-50 bg-black/95 flex flex-col items-center justify-center hidden">
+        <span class="text-yellow-400 text-xl font-bold mb-6 tracking-widest uppercase">E O FILME ESCOLHIDO É...</span>
+        <div id="countdown-number" class="text-9xl font-extrabold text-white font-display countdown-pulse">
+            3
+        </div>
+    </div>
+
+    <script>
+        let animationFrameId = null;
+        let currentAnimation = null;
+        let canvas, ctx;
+
+        window.onload = function() {
+            canvas = document.getElementById('anim-canvas');
+            ctx = canvas.getContext('2d');
+            resizeCanvas();
+            window.addEventListener('resize', resizeCanvas);
+        };
+
+        function resizeCanvas() {
+            if (canvas) {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            }
+        }
+
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-view').forEach(view => view.classList.add('hidden'));
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('bg-yellow-400', 'text-gray-950', 'shadow-md');
+                btn.classList.add('text-gray-300');
+            });
+
+            const activeView = document.getElementById(`view-${tabId}`);
+            if (activeView) activeView.classList.remove('hidden');
+
+            const activeBtn = document.getElementById(`tab-btn-${tabId}`);
+            if (activeBtn) {
+                activeBtn.classList.add('bg-yellow-400', 'text-gray-950', 'shadow-md');
+                activeBtn.classList.remove('text-gray-300');
+            }
+        }
+
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+        }
+
+        function calcularResultado() {
+            const turma = document.getElementById('turma-input').value.trim();
+            const vDragao = parseInt(document.getElementById('votos-dragao').value) || 0;
+            const vImperador = parseInt(document.getElementById('votos-imperador').value) || 0;
+            const vTesouro = parseInt(document.getElementById('votos-tesouro').value) || 0;
+
+            if (!turma) {
+                alert("Por favor, preencha o nome da turma.");
+                return;
+            }
+
+            document.getElementById('card-turma-title').innerText = turma.toUpperCase();
+            document.getElementById('card-votos-dragao').innerText = vDragao + " votos";
+            document.getElementById('card-votos-imperador').innerText = vImperador + " votos";
+            document.getElementById('card-votos-tesouro').innerText = vTesouro + " votos";
+
+            const maxVotos = Math.max(vDragao, vImperador, vTesouro);
+            const vencedores = [];
+
+            if (vDragao === maxVotos) vencedores.push("🐉 Como Treinar o Seu Dragão");
+            if (vImperador === maxVotos) vencedores.push("🦙 A Nova Onda do Imperador");
+            if (vTesouro === maxVotos) vencedores.push("🚀 Planeta do Tesouro");
+
+            const vencedorBox = document.getElementById('vencedor-box');
+            const vencedorTitle = document.getElementById('card-vencedor-nome');
+
+            if (vencedores.length > 1) {
+                vencedorBox.className = "p-6 rounded-2xl bg-red-500/10 border-2 border-red-500/50 text-center";
+                vencedorTitle.className = "text-2xl md:text-3xl font-extrabold text-red-400 mt-1";
+                vencedorTitle.innerHTML = "⚠️ EMPATE!<br><span class='text-lg font-normal text-gray-200 mt-2 block'>" + vencedores.join(" & ") + "</span>";
+            } else {
+                vencedorBox.className = "p-6 rounded-2xl bg-yellow-500/10 border-2 border-yellow-500/40 text-center";
+                vencedorTitle.className = "text-3xl md:text-4xl font-extrabold text-yellow-400 mt-1";
+                vencedorTitle.innerText = vencedores[0];
+            }
+
+            document.getElementById('resultado-card').classList.remove('hidden');
+            document.getElementById('resultado-card').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function limparFormulario() {
+            document.getElementById('vote-form').reset();
+            document.getElementById('resultado-card').classList.add('hidden');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function toggleFullscreen() {
+            const modal = document.getElementById('animation-modal');
+            if (!document.fullscreenElement) {
+                if (modal.requestFullscreen) modal.requestFullscreen();
+            } else {
+                if (document.exitFullscreen) document.exitFullscreen();
+            }
+        }
+
+        function executarAnimacao(tipo) {
+            currentAnimation = tipo;
+            resizeCanvas();
+            document.getElementById('animation-modal').classList.remove('hidden');
+            document.getElementById('animation-modal').classList.add('flex');
+            
+            const splash = document.getElementById('anim-splash');
+            splash.classList.add('opacity-0');
+
+            if (animationFrameId) cancelAnimationFrame(animationFrameId);
+
+            if (tipo === 'dragao') renderDragaoEpic();
+            else if (tipo === 'imperador') renderImperador();
+            else if (tipo === 'tesouro') renderTesouro();
+
+            setTimeout(() => {
+                showSplashBanner(tipo);
+            }, 5000);
+        }
+
+        function repetirAnimacao() {
+            if (currentAnimation) {
+                executarAnimacao(currentAnimation);
+            }
+        }
+
+        function fecharAnimacao() {
+            if (animationFrameId) cancelAnimationFrame(animationFrameId);
+            document.getElementById('animation-modal').classList.add('hidden');
+            document.getElementById('animation-modal').classList.remove('flex');
+            if (document.fullscreenElement) document.exitFullscreen();
+        }
+
+        function showSplashBanner(tipo) {
+            const splash = document.getElementById('anim-splash');
+            const icon = document.getElementById('splash-icon');
+            const title = document.getElementById('splash-title');
+
+            if (tipo === 'dragao') {
+                icon.innerText = "🐉";
+                title.innerText = "COMO TREINAR O SEU DRAGÃO";
+            } else if (tipo === 'imperador') {
+                icon.innerText = "🦙";
+                title.innerText = "A NOVA ONDA DO IMPERADOR";
+            } else if (tipo === 'tesouro') {
+                icon.innerText = "🚀";
+                title.innerText = "PLANETA DO TESOURO";
+            }
+
+            splash.classList.remove('opacity-0');
+        }
+
+        function iniciarRevelacao(tipo) {
+            const countdownModal = document.getElementById('countdown-modal');
+            const numDisplay = document.getElementById('countdown-number');
+
+            countdownModal.classList.remove('hidden');
+
+            let count = 3;
+            numDisplay.innerText = count;
+
+            const interval = setInterval(() => {
+                count--;
+                if (count > 0) {
+                    numDisplay.innerText = count;
+                } else {
+                    clearInterval(interval);
+                    countdownModal.classList.add('hidden');
+                    executarAnimacao(tipo);
+                }
+            }, 1000);
+        }
+
+        /* =====================================================================
+           ANIMAÇÃO TOTALMENTE REFORMULADA: COMO TREINAR O SEU DRAGÃO (BANGUELA)
+           ===================================================================== */
+        function renderDragaoEpic() {
+            let t = 0;
+
+            // Nuvens volumosas
+            const clouds = Array.from({length: 12}, () => ({
+                x: Math.random() * canvas.width,
+                y: Math.random() * (canvas.height * 0.6),
+                r: Math.random() * 80 + 50,
+                speed: Math.random() * 1.5 + 0.5
+            }));
+
+            // Partículas de plasma e faíscas
+            const particles = [];
+
+            // Fogos de artifício no final
+            const fireworks = [];
+
+            function loop() {
+                t += 0.016;
+                const W = canvas.width;
+                const H = canvas.height;
+
+                // 1. Céu Noturno com gradiente Aurora Boreal
+                const gradSky = ctx.createLinearGradient(0, 0, 0, H);
+                gradSky.addColorStop(0, '#020409');
+                gradSky.addColorStop(0.5, '#071527');
+                gradSky.addColorStop(1, '#0c1b33');
+                ctx.fillStyle = gradSky;
+                ctx.fillRect(0, 0, W, H);
+
+                // Aurora Boreal fluida
+                ctx.save();
+                ctx.globalAlpha = 0.25;
+                for (let i = 0; i < 3; i++) {
+                    ctx.beginPath();
+                    ctx.moveTo(0, H * 0.3);
+                    for (let x = 0; x <= W; x += 30) {
+                        const y = H * 0.25 + Math.sin(x * 0.003 + t + i) * 60 + Math.cos(t * 0.5) * 30;
+                        ctx.lineTo(x, y);
+                    }
+                    ctx.lineTo(W, H);
+                    ctx.lineTo(0, H);
+                    ctx.fillStyle = i === 0 ? '#10B981' : i === 1 ? '#3B82F6' : '#8B5CF6';
+                    ctx.fill();
+                }
+                ctx.restore();
+
+                // Estrelas piscando
+                ctx.fillStyle = '#FFFFFF';
+                for (let i = 0; i < 60; i++) {
+                    const sx = (i * 137.5) % W;
+                    const sy = (i * 93.1) % (H * 0.6);
+                    const alpha = Math.abs(Math.sin(t * 2 + i));
+                    ctx.globalAlpha = alpha;
+                    ctx.beginPath();
+                    ctx.arc(sx, sy, (i % 3) + 1, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+                ctx.globalAlpha = 1;
+
+                // 2. Montanhas de Berk em camadas Parallax
+                // Camada Distante
+                ctx.fillStyle = '#060f1e';
+                ctx.beginPath();
+                ctx.moveTo(0, H);
+                for (let x = 0; x <= W; x += 50) {
+                    const my = H - 160 - Math.sin(x * 0.005) * 80 - Math.cos(x * 0.01) * 40;
+                    ctx.lineTo(x, my);
+                }
+                ctx.lineTo(W, H);
+                ctx.fill();
+
+                // Camada Próxima
+                ctx.fillStyle = '#030812';
+                ctx.beginPath();
+                ctx.moveTo(0, H);
+                for (let x = 0; x <= W; x += 40) {
+                    const my = H - 90 - Math.sin(x * 0.01) * 50 - Math.cos(x * 0.02) * 30;
+                    ctx.lineTo(x, my);
+                }
+                ctx.lineTo(W, H);
+                ctx.fill();
+
+                // 3. Nuvens volumosas
+                clouds.forEach(c => {
+                    c.x -= c.speed;
+                    if (c.x < -150) c.x = W + 150;
+                    ctx.fillStyle = 'rgba(15, 23, 42, 0.4)';
+                    ctx.beginPath();
+                    ctx.arc(c.x, c.y, c.r, 0, Math.PI * 2);
+                    ctx.arc(c.x + c.r * 0.5, c.y - c.r * 0.2, c.r * 0.7, 0, Math.PI * 2);
+                    ctx.fill();
+                });
+
+                // 4. Trajetória Acrobática do Banguela (Toothless)
+                // O dragão faz um looping espetacular e voa rasante
+                const pathProgress = (t * 0.35) % 2;
+                let dragaoX, dragaoY, angle, wingBeat;
+
+                wingBeat = Math.sin(t * 12); // Batida de asas fluida
+
+                if (pathProgress < 1) {
+                    // Entrada e looping no ar
+                    const p = pathProgress;
+                    dragaoX = p * (W + 200) - 100;
+                    dragaoY = H * 0.5 + Math.sin(p * Math.PI * 2) * 120 - Math.cos(p * Math.PI * 4) * 60;
+                    
+                    const nextX = (p + 0.01) * (W + 200) - 100;
+                    const nextY = H * 0.5 + Math.sin((p + 0.01) * Math.PI * 2) * 120 - Math.cos((p + 0.01) * Math.PI * 4) * 60;
+                    angle = Math.atan2(nextY - dragaoY, nextX - dragaoX);
+                } else {
+                    // Rasante rápido com subida épica
+                    const p = pathProgress - 1;
+                    dragaoX = p * (W + 200) - 100;
+                    dragaoY = H * 0.7 - Math.sin(p * Math.PI) * (H * 0.4);
+                    angle = -Math.PI * 0.15;
+                }
+
+                // Gerar Partículas de Rastro de Plasma
+                particles.push({
+                    x: dragaoX - Math.cos(angle) * 30,
+                    y: dragaoY - Math.sin(angle) * 30,
+                    vx: (Math.random() - 0.5) * 2 - Math.cos(angle) * 3,
+                    vy: (Math.random() - 0.5) * 2 - Math.sin(angle) * 3,
+                    life: 1,
+                    color: Math.random() > 0.4 ? '#3B82F6' : '#8B5CF6'
+                });
+
+                // Desenhar Rastro
+                for (let i = particles.length - 1; i >= 0; i--) {
+                    const p = particles[i];
+                    p.x += p.vx;
+                    p.y += p.vy;
+                    p.life -= 0.025;
+                    if (p.life <= 0) {
+                        particles.splice(i, 1);
+                        continue;
+                    }
+                    ctx.fillStyle = p.color;
+                    ctx.globalAlpha = p.life;
+                    ctx.beginPath();
+                    ctx.arc(p.x, p.y, p.life * 7, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+                ctx.globalAlpha = 1;
+
+                // 5. Desenhar o Dragão (Banguela) em Canvas Vetorial Detalhado
+                ctx.save();
+                ctx.translate(dragaoX, dragaoY);
+                ctx.rotate(angle);
+
+                // Asas Enormes do Banguela
+                ctx.fillStyle = '#0B0F17'; // Preto escuro Night Fury
+                ctx.strokeStyle = '#1E293B';
+                ctx.lineWidth = 2;
+
+                // Asa Esquerda (superior)
+                ctx.beginPath();
+                ctx.moveTo(0, -5);
+                ctx.quadraticCurveTo(-20, -60 + wingBeat * 30, -70, -40 + wingBeat * 25);
+                ctx.quadraticCurveTo(-30, -15, 10, 0);
+                ctx.fill();
+                ctx.stroke();
+
+                // Asa Direita (inferior)
+                ctx.beginPath();
+                ctx.moveTo(0, 5);
+                ctx.quadraticCurveTo(-20, 60 - wingBeat * 30, -70, 40 - wingBeat * 25);
+                ctx.quadraticCurveTo(-30, 15, 10, 0);
+                ctx.fill();
+                ctx.stroke();
+
+                // Corpo do Banguela
+                ctx.fillStyle = '#090D14';
+                ctx.beginPath();
+                ctx.ellipse(0, 0, 32, 12, 0, 0, Math.PI * 2);
+                ctx.fill();
+
+                // Cabeça com Orelhas/Chifres característicos
+                ctx.beginPath();
+                ctx.ellipse(25, -2, 14, 10, 0, 0, Math.PI * 2);
+                ctx.fill();
+
+                // Chifres/Orelhas da cabeça
+                ctx.fillStyle = '#06090F';
+                ctx.beginPath();
+                ctx.moveTo(20, -8);
+                ctx.lineTo(12, -22);
+                ctx.lineTo(26, -12);
+                ctx.fill();
+
+                ctx.beginPath();
+                ctx.moveTo(20, 8);
+                ctx.lineTo(12, 22);
+                ctx.lineTo(26, 12);
+                ctx.fill();
+
+                // Olhos Verdes Brilhantes do Banguela
+                ctx.fillStyle = '#22C55E';
+                ctx.shadowColor = '#22C55E';
+                ctx.shadowBlur = 12;
+                ctx.beginPath();
+                ctx.arc(31, -3, 3.5, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.shadowBlur = 0; // reset
+
+                // Cauda do Banguela com Aleta de Voo Vermelha do Soluço
+                ctx.beginPath();
+                ctx.moveTo(-28, 0);
+                ctx.quadraticCurveTo(-50, wingBeat * 5, -70, 0);
+                ctx.lineWidth = 4;
+                ctx.strokeStyle = '#090D14';
+                ctx.stroke();
+
+                // Aleta Vermelha na Ponta da Cauda
+                ctx.fillStyle = '#DC2626'; // Vermelho característico
+                ctx.beginPath();
+                ctx.moveTo(-65, 0);
+                ctx.lineTo(-78, -14);
+                ctx.lineTo(-72, 0);
+                ctx.fill();
+
+                ctx.restore();
+
+                // Disparar fogos no momento final
+                if (t > 4.2 && Math.random() < 0.25) {
+                    fireworks.push({
+                        x: Math.random() * W,
+                        y: Math.random() * (H * 0.5),
+                        color: ['#FFD700', '#3B82F6', '#EF4444', '#10B981'][Math.floor(Math.random() * 4)],
+                        particles: Array.from({length: 25}, () => ({
+                            dx: (Math.random() - 0.5) * 8,
+                            dy: (Math.random() - 0.5) * 8,
+                            life: 1
+                        }))
+                    });
+                }
+
+                // Renderizar Fogos de Artifício
+                fireworks.forEach((fw, fIndex) => {
+                    fw.particles.forEach(p => {
+                        p.life -= 0.02;
+                        if (p.life > 0) {
+                            ctx.fillStyle = fw.color;
+                            ctx.globalAlpha = p.life;
+                            ctx.beginPath();
+                            ctx.arc(fw.x + p.dx * (1 - p.life) * 20, fw.y + p.dy * (1 - p.life) * 20, 3, 0, Math.PI * 2);
+                            ctx.fill();
+                        }
+                    });
+                });
+                ctx.globalAlpha = 1;
+
+                animationFrameId = requestAnimationFrame(loop);
+            }
+            loop();
+        }
+
+        /* =====================================================================
+           ANIMAÇÃO 2: A NOVA ONDA DO IMPERADOR (KUZCO LLAMA INCA FEST)
+           ===================================================================== */
+        function renderImperador() {
+            let t = 0;
+            const confetti = Array.from({length: 100}, () => ({
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height,
+                color: Math.random() > 0.5 ? '#FFD700' : '#8B5CF6',
+                size: Math.random() * 10 + 4,
+                speedY: Math.random() * 3 + 2,
+                rot: Math.random() * Math.PI
+            }));
+
+            function loop() {
+                t += 0.03;
+                const W = canvas.width;
+                const H = canvas.height;
+
+                ctx.fillStyle = '#110321';
+                ctx.fillRect(0, 0, W, H);
+
+                // Sol e Templo Inca ao fundo
+                ctx.fillStyle = 'rgba(255, 215, 0, 0.15)';
+                ctx.beginPath();
+                ctx.arc(W / 2, H / 2, 220 + Math.sin(t * 3) * 20, 0, Math.PI * 2);
+                ctx.fill();
+
+                // Chuva de confetti imperial
+                confetti.forEach(p => {
+                    p.y += p.speedY;
+                    p.rot += 0.05;
+                    if (p.y > H) p.y = -20;
+                    ctx.save();
+                    ctx.translate(p.x, p.y);
+                    ctx.rotate(p.rot);
+                    ctx.fillStyle = p.color;
+                    ctx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size);
+                    ctx.restore();
+                });
+
+                // Galope cômico da Lhama Kuzco
+                const centerX = W / 2 + Math.cos(t * 2) * 150;
+                const centerY = H / 2 + Math.abs(Math.sin(t * 6)) * -40;
+
+                // Coroa Saltitante
+                ctx.font = '70px sans-serif';
+                ctx.fillText('👑', centerX + 15, centerY - 90 + Math.sin(t * 8) * 15);
+
+                // Lhama Kuzco
+                ctx.font = '120px sans-serif';
+                ctx.fillText('🦙', centerX, centerY + 20);
+
+                animationFrameId = requestAnimationFrame(loop);
+            }
+            loop();
+        }
+
+        /* =====================================================================
+           ANIMAÇÃO 3: PLANETA DO TESOURO (SOLAR SURFER & COSMIC MAP)
+           ===================================================================== */
+        function renderTesouro() {
+            let t = 0;
+            const stars = Array.from({length: 160}, () => ({
+                x: (Math.random() - 0.5) * canvas.width * 2,
+                y: (Math.random() - 0.5) * canvas.height * 2,
+                z: Math.random() * canvas.width
+            }));
+
+            function loop() {
+                t += 0.025;
+                const W = canvas.width;
+                const H = canvas.height;
+
+                ctx.fillStyle = '#010A0F';
+                ctx.fillRect(0, 0, W, H);
+
+                // Mapa Holográfico do Tesouro (Esfera de Ouro no centro)
+                const mapRadius = 140 + Math.sin(t * 2) * 15;
+                const mapGrad = ctx.createRadialGradient(W / 2, H / 2, 10, W / 2, H / 2, mapRadius);
+                mapGrad.addColorStop(0, 'rgba(255, 215, 0, 0.4)');
+                mapGrad.addColorStop(0.7, 'rgba(16, 185, 129, 0.2)');
+                mapGrad.addColorStop(1, 'rgba(0, 0, 0, 0)');
+                ctx.fillStyle = mapGrad;
+                ctx.beginPath();
+                ctx.arc(W / 2, H / 2, mapRadius, 0, Math.PI * 2);
+                ctx.fill();
+
+                // Estrelas e Voo Hiperespacial
+                stars.forEach(s => {
+                    s.z -= 5;
+                    if (s.z <= 0) s.z = W;
+
+                    const k = 256 / s.z;
+                    const px = s.x * k + W / 2;
+                    const py = s.y * k + H / 2;
+
+                    if (px >= 0 && px <= W && py >= 0 && py <= H) {
+                        const size = (1 - s.z / W) * 5;
+                        ctx.fillStyle = '#10B981';
+                        ctx.beginPath();
+                        ctx.arc(px, py, size, 0, Math.PI * 2);
+                        ctx.fill();
+                    }
+                });
+
+                // Prancha Solar / Foguete
+                const surferX = W / 2 + Math.sin(t) * (W * 0.32);
+                const surferY = H * 0.5 + Math.cos(t * 1.8) * 70;
+
+                ctx.font = '100px sans-serif';
+                ctx.fillText('🚀', surferX, surferY);
+
+                // Pequeno Morph flutuando ao redor
+                const morphX = surferX + Math.cos(t * 5) * 80;
+                const morphY = surferY + Math.sin(t * 5) * 60;
+                ctx.font = '45px sans-serif';
+                ctx.fillText('🤖', morphX, morphY);
+
+                animationFrameId = requestAnimationFrame(loop);
+            }
+            loop();
+        }
+    </script>
+</body>
+</html>
