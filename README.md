@@ -10,7 +10,6 @@ Uma aplicação web 100% estática, moderna e interativa desenvolvida para geren
 * 🚀 **Planeta do Tesouro**
 
 
-
 ## Funcionalidades
 
 * 🍿 **Registrar Votação:** Digite o nome da turma e a quantidade manual de votos de cada filme para calcular o vencedor ou identificar empates com um visual pronto para print de tela.
@@ -19,8 +18,6 @@ Uma aplicação web 100% estática, moderna e interativa desenvolvida para geren
 * 🏆 **Revelação Final:** Faça uma contagem regressiva interativa (3... 2... 1...) para anunciar o grande campeão com uma animação em tela cheia.
 * ⛶ **Suporte a Projetor / TV:** Modo de tela cheia e visual otimizado para exibição em auditórios e salas de aula.
 * 📶 **Funcionamento 100% Offline:** Não consome APIs externas, bancos de dados ou conexões de rede após ser carregado.
-
----
 
 ## 🛠️ Tecnologias Utilizadas
 
